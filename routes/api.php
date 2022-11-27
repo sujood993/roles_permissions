@@ -21,11 +21,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::middleware(['auth:api', 'isAdmin'])->group(function () {
-    Route::Resource('users', UserController::class);
+Route::middleware('auth:api')->group(function () {
+    Route::Resource('users', UserController::class)->middleware('isAdmin');
+    Route::post('users/{user}/assign-rules', [UserController::class, 'assignRule']);
+    Route::post('/assign-permission-role/{role}', [UserController::class, 'assignPermissionRule']);
 });
-Route::post('users/{user}/assign-rules', [UserController::class, 'assignRule']);
-Route::post('/assign-permission-role/{role}', [UserController::class, 'assignPermissionRule']);
+
 
 
 
